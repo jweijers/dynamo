@@ -49,6 +49,7 @@
 		<module>dynamo-archetype-modules</module>
 		<module>dynamo-showcase</module>
 		<module>dynamo-test</module>
+		<module>dynamo-jasperreports</module>
 	</modules>
 
 	<properties>
