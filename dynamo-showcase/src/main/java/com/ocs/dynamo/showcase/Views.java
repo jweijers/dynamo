@@ -39,6 +39,11 @@ public final class Views {
     public static final String TABULAR_MOVIES_VIEW = "TabularMoviesView";
 
     /**
+     * Upload form view.
+     */
+    public static final String UPLOAD_FORM_VIEW = "UploadFormView";
+
+    /**
      * Only use static members.
      */
     private Views() {

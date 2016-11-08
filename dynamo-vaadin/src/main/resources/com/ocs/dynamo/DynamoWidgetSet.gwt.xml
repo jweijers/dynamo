@@ -6,4 +6,5 @@
 
     <inherits name="com.explicatis.ext_token_field.WidgetSet" />
 
+    <inherits name="org.vaadin.easyuploads.Widgetset" />
 </module>
