@@ -122,7 +122,7 @@ public interface AttributeModel extends Comparable<AttributeModel> {
 	/**
 	 * 
 	 * 
-	 * @return Ther order number (used to internally order the attribute models)
+	 * @return The order number (used to internally order the attribute models)
 	 */
 	Integer getOrder();
 
