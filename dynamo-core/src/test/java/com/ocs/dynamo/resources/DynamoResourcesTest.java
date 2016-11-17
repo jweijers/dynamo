@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * JUnit test for default message service implementation.
+ * JUnit test for obtaining default dynamo resources.
  */
 public class DynamoResourcesTest {
 
