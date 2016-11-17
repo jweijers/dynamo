@@ -43,8 +43,13 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang.StringUtils;
+// FIXME Not safe to replace BeanUtils with PropertyUtils. Apparently there is some default sorting involved
+// using the Spring Utilities which allows the JUnit Test EntityModelFactoryImplTest to succeed. Changing
+// it to PropertyUtils breaks this somewhat hidden feature.
+//import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Sets;
@@ -520,7 +525,7 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 			name = name.substring(p + 1);
 		}
 
-		if (!BeanUtils.isSimpleValueType(model.getType())) {
+		if (!ClassUtils.isSimpleValueType(model.getType())) {
 			// No relation type set in view model definition, hence derive
 			// defaults
 			Embedded embedded = ClassUtils.getAnnotation(parentClass, name, Embedded.class);
@@ -592,9 +597,6 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 	 * 
 	 * @param type
 	 *            the java type
-	 * @param entityClass
-	 *            the class on which the property is defined
-	 * @param fieldName
 	 * @param dateType
 	 * @return
 	 */

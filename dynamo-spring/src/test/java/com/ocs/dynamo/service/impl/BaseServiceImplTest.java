@@ -13,22 +13,6 @@
  */
 package com.ocs.dynamo.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Lists;
 import com.ocs.dynamo.dao.BaseDao;
 import com.ocs.dynamo.dao.Pageable;
@@ -44,6 +28,20 @@ import com.ocs.dynamo.filter.Filter;
 import com.ocs.dynamo.service.MessageService;
 import com.ocs.dynamo.test.BaseMockitoTest;
 import com.ocs.dynamo.test.MockUtil;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import javax.inject.Inject;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A basic test class for both testing the general testing framework and the BaseServiceImpl class
@@ -350,7 +348,7 @@ public class BaseServiceImplTest extends BaseMockitoTest {
 
     private class TestService extends BaseServiceImpl<Integer, TestEntity> {
 
-        @Autowired
+        @Inject
         private Dependency dependency;
 
         @Override

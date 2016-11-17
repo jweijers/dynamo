@@ -16,6 +16,7 @@ package com.monitorjbl.xlsx.impl;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -25,7 +26,6 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.springframework.util.StringUtils;
 
 import com.monitorjbl.xlsx.exceptions.NotSupportedException;
 
@@ -154,7 +154,7 @@ public class StreamingCell implements Cell {
 	 */
 	@Override
 	public double getNumericCellValue() {
-		if (StringUtils.isEmpty(contents)) {
+		if (StringUtils.isEmpty((String)contents)) {
 			throw new NullPointerException();
 		}
 		return Double.parseDouble((String) contents);

@@ -20,8 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.util.StringUtils;
-
 import com.ocs.dynamo.domain.model.AttributeModel;
 import com.ocs.dynamo.domain.model.AttributeType;
 import com.ocs.dynamo.domain.model.EntityModel;
@@ -33,6 +31,7 @@ import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.data.util.filter.Compare.Equal;
 import com.vaadin.data.util.filter.SimpleStringFilter;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Various utility methods for dealing with filters
@@ -429,9 +428,6 @@ public final class FilterUtil {
 	 *            the original filter
 	 * @param entityModel
 	 *            the entity model used to determine which filters must be replaced
-	 * @param overrideProperty
-	 *            optional property - if supplied, then we the application will check this property
-	 *            instead of the property supplied in the original filters
 	 */
 	public static void replaceMasterAndDetailFilters(com.ocs.dynamo.filter.Filter filter, EntityModel<?> entityModel) {
 

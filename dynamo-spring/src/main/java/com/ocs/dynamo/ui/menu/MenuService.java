@@ -213,7 +213,7 @@ public class MenuService {
 	 * Highlights a certain menu item (adds the "highlight" style) to mark it as the last visited
 	 * main menu item
 	 * 
-	 * @param item
+	 * @param menuBar
 	 * @param destination
 	 */
 	public void setLastVisited(MenuBar menuBar, String destination) {
@@ -228,7 +228,7 @@ public class MenuService {
 	/**
 	 * Sets the visibility of a certain item based on its destination
 	 * 
-	 * @param menu
+	 * @param item
 	 *            the main menu bar
 	 * @param destination
 	 *            the destination
