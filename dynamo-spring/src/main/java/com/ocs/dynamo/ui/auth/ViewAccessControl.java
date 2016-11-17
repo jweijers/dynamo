@@ -13,10 +13,10 @@
  */
 package com.ocs.dynamo.ui.auth;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.ui.UI;
+import org.apache.commons.lang.StringUtils;
+
+import javax.inject.Inject;
 
 /**
  * View access control - used by Spring Vaadin to determine who is allowed to open which views
@@ -25,7 +25,7 @@ import com.vaadin.ui.UI;
  */
 public class ViewAccessControl implements com.vaadin.spring.access.ViewAccessControl {
 
-	@Autowired
+	@Inject
 	private PermissionChecker checker;
 
 	@Override

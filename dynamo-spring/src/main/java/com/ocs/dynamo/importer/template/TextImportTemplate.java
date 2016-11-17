@@ -18,7 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ocs.dynamo.exception.OCSImportException;
 import com.ocs.dynamo.service.MessageService;
@@ -36,7 +37,8 @@ import com.ocs.dynamo.service.MessageService;
  */
 public abstract class TextImportTemplate<ID, T> {
 
-    private static final Logger LOG = Logger.getLogger(TextImportTemplate.class);
+    /** Logger for {@link TextImportTemplate}. */
+    private static final Logger LOG = LoggerFactory.getLogger(TextImportTemplate.class);
 
     private List<String[]> lines;
 

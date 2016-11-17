@@ -148,6 +148,8 @@
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
         </dependency>
+
+        <!-- Apache Commons -->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -155,6 +157,10 @@
         <dependency>
         	<groupId>commons-io</groupId>
         	<artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>commons-beanutils</groupId>
+        	<artifactId>commons-beanutils</artifactId>
         </dependency>
 
         <!-- Test -->

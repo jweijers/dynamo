@@ -13,40 +13,41 @@
  */
 package com.ocs.dynamo.utils;
 
-import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.constraints.Size;
-
+import com.ocs.dynamo.exception.OCSRuntimeException;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ResolvableType;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.Assert;
 
-import com.ocs.dynamo.exception.OCSRuntimeException;
+import javax.validation.constraints.Size;
+import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
+import java.net.URI;
+import java.net.URL;
+import java.util.*;
 
 /**
  * @author patrick.deenen Utility class for dealing with classes and annotations
  */
 public final class ClassUtils {
 
+    /** Logger for {@link ClassUtils}. */
+    private static final Logger LOG = LoggerFactory.getLogger(ClassUtils.class);
+
     private static final String GET = "get";
 
     private static final String IS = "is";
 
-    private static final Logger LOG = Logger.getLogger(ClassUtils.class);
-
     private static final String SET = "set";
+
+    private static final Set<Class<?>> SIMPLE_VALUE_TYPES = new HashSet<Class<?>>(Arrays.asList(
+            Boolean.class, Byte.class, Character.class, Double.class, Float.class, Integer.class, Long.class, Short.class,
+            URI.class, URL.class, Locale.class, Class.class)
+    );
 
     private ClassUtils() {
     }
@@ -154,7 +155,7 @@ public final class ClassUtils {
      * 
      * @param field
      *            The field with annotations
-     * @param annotionType
+     * @param annotationClass
      *            The name of the annotation type to find
      * @param attributeName
      *            The name of the attribute on the annotation type to find the value
@@ -166,7 +167,11 @@ public final class ClassUtils {
         R result = null;
         Annotation annotation = getAnnotationOnField(field, annotationClass);
         if (annotation != null) {
-            result = (R) AnnotationUtils.getValue(annotation, attributeName);
+            try {
+               result = (R) annotation.annotationType().getDeclaredMethod(attributeName).invoke(annotation);
+            } catch (ReflectiveOperationException e) {
+                throw new OCSRuntimeException(String.format("Cannot retrieve value from annotation '%s' on '%s'", annotation, field), e);
+            }
         }
         return result;
     }
@@ -277,8 +282,7 @@ public final class ClassUtils {
      * @return
      */
     public static <T> Constructor<T> getConstructor(Class<T> clazz, Object... args) {
-        Assert.notNull(clazz);
-        Assert.noNullElements(args);
+        if (clazz == null) throw new IllegalArgumentException("clazz is null");
         Constructor<T> constructor = null;
         List<Class<?>> types = new ArrayList<Class<?>>();
         for (Object arg : args) {
@@ -419,7 +423,12 @@ public final class ClassUtils {
         PropertyDescriptor pd = null;
         if (clazz != null && !StringUtils.isEmpty(property)) {
             String[] props = property.split("\\.", 2);
-            pd = org.springframework.beans.BeanUtils.getPropertyDescriptor(clazz, props[0]);
+            try {
+                pd = PropertyUtils.getPropertyDescriptor(clazz, props[0]);
+            } catch (ReflectiveOperationException e) {
+                throw new OCSRuntimeException(
+                    String.format("Error getting descriptor for nested property '%s' at Class '%s'", property, clazz), e);
+            }
             if (props.length > 1) {
                 pd = getPropertyDescriptorForNestedProperty(pd.getPropertyType(), props[1]);
             }
@@ -485,7 +494,11 @@ public final class ClassUtils {
     public static <T> T instantiateClass(Class<T> clazz, Object... args) {
         Constructor<T> constructor = getConstructor(clazz, args);
         if (constructor != null) {
-            return org.springframework.beans.BeanUtils.instantiateClass(constructor, args);
+            try {
+                return constructor.newInstance(args);
+            } catch (ReflectiveOperationException e) {
+                throw new OCSRuntimeException("Error occurred calling constructor " + constructor, e);
+            }
         }
         return null;
     }
@@ -537,6 +550,17 @@ public final class ClassUtils {
 			throw new OCSRuntimeException(e.getMessage(), e);
 		}
 	}
+
+    public static boolean isSimpleProperty(Class<?> clazz) {
+        if (clazz == null) throw new IllegalArgumentException("clazz is null");
+        return isSimpleValueType(clazz) || (clazz.isArray() && isSimpleValueType(clazz.getComponentType()));
+    }
+
+    public static boolean isSimpleValueType(Class<?> clazz) {
+        return (clazz.isPrimitive() || SIMPLE_VALUE_TYPES.contains(clazz) ||
+                clazz.isEnum() || CharSequence.class.isAssignableFrom(clazz) ||
+                Number.class.isAssignableFrom(clazz) ||  Date.class.isAssignableFrom(clazz));
+    }
 
 	private static <T, S extends T> void copyFields(T from, S to, Field[] fields) throws IllegalAccessException {
 		for (Field field : fields) {

@@ -13,8 +13,6 @@
  */
 package com.ocs.dynamo.ui.view;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.ocs.dynamo.domain.model.EntityModelFactory;
 import com.ocs.dynamo.service.MessageService;
 import com.ocs.dynamo.ui.BaseUI;
@@ -24,6 +22,8 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import javax.inject.Inject;
 
 /**
  * A base class for Views. Provides easy access to the entity model factory and the navigator
@@ -36,10 +36,10 @@ public abstract class BaseView extends CustomComponent implements View {
 
 	private static final long serialVersionUID = 8340448520371840427L;
 
-	@Autowired
+	@Inject
 	private EntityModelFactory modelFactory;
 
-	@Autowired
+	@Inject
 	private MessageService messageService;
 
 	public EntityModelFactory getModelFactory() {

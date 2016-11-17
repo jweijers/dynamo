@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.ocs.dynamo.domain.AbstractEntity;
 import com.ocs.dynamo.domain.model.AttributeDateType;

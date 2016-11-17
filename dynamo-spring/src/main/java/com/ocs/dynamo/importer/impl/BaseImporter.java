@@ -17,8 +17,8 @@ import java.beans.PropertyDescriptor;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.ocs.dynamo.exception.OCSImportException;
 import com.ocs.dynamo.importer.ImportField;
@@ -209,7 +209,7 @@ public abstract class BaseImporter<R, U> {
 		T t = ClassUtils.instantiateClass(clazz);
 		t.setRowNum(rowNum);
 
-		PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(clazz);
+		PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(clazz);
 		for (PropertyDescriptor d : descriptors) {
 			ImportField field = ClassUtils.getAnnotation(clazz, d.getName(), ImportField.class);
 			if (field != null) {

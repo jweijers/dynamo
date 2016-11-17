@@ -27,7 +27,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -76,7 +77,8 @@ import com.vaadin.ui.UI;
  */
 public class TableExportActionHandler implements Handler {
 
-	private static final Logger LOG = Logger.getLogger(TableExportActionHandler.class);
+	/** Logger for {@link TableExportActionHandler}. */
+	private static final Logger LOG = LoggerFactory.getLogger(TableExportActionHandler.class);
 
 	/**
 	 * A model-based export to CSV
@@ -849,9 +851,7 @@ public class TableExportActionHandler implements Handler {
 	 * 
 	 * @param size
 	 *            the size of the data set (in rows)
-	 * @param hierarchical
-	 *            whether the data is hierarchical
-	 * 
+	 *
 	 * @return
 	 */
 	protected Workbook createWorkbook(int size) {

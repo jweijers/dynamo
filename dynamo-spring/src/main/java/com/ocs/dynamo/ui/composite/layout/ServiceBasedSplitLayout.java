@@ -16,7 +16,7 @@ package com.ocs.dynamo.ui.composite.layout;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.ocs.dynamo.dao.query.FetchJoinInformation;
 import com.ocs.dynamo.domain.AbstractEntity;
@@ -70,8 +70,6 @@ public class ServiceBasedSplitLayout<ID extends Serializable, T extends Abstract
 	 *            the entity model
 	 * @param formOptions
 	 *            the form options
-	 * @param fieldFilters
-	 *            the field filters
 	 * @param sortOrder
 	 *            the sort order
 	 * @param joins

@@ -15,7 +15,8 @@ package com.ocs.dynamo.ui.utils;
 
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ocs.dynamo.utils.PasteUtils;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -31,7 +32,8 @@ import com.vaadin.ui.Table;
  */
 public abstract class PasteTemplate {
 
-    private static final Logger LOG = Logger.getLogger(PasteTemplate.class);
+    /** Logger for {@link PasteTemplate}. */
+    private static final Logger LOG = LoggerFactory.getLogger(PasteTemplate.class);
 
     private TextChangeEvent event;
 

@@ -24,7 +24,8 @@ import javax.validation.ValidatorFactory;
 import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.AssertTrue;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ocs.dynamo.dao.BaseDao;
@@ -53,7 +54,8 @@ import com.ocs.dynamo.utils.ClassUtils;
 
 public abstract class BaseServiceImpl<ID, T extends AbstractEntity<ID>> implements BaseService<ID, T> {
 
-	private static final Logger LOGGER = Logger.getLogger(BaseServiceImpl.class);
+	/** Logger for {@link BaseServiceImpl}. */
+	private static final Logger LOG = LoggerFactory.getLogger(BaseServiceImpl.class);
 
 	@Inject
 	private ValidatorFactory factory;
@@ -264,7 +266,7 @@ public abstract class BaseServiceImpl<ID, T extends AbstractEntity<ID>> implemen
 			}
 
 			for (String error : errors) {
-				LOGGER.error(error);
+				LOG.error(error);
 			}
 
 			throw new OCSValidationException(errors);

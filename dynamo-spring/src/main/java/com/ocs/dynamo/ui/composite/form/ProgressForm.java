@@ -26,7 +26,8 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.UI;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,6 +41,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class ProgressForm<T> extends BaseCustomComponent implements Progressable {
 
+	/** Logger for {@link ProgressForm}. */
+	private static final Logger LOG = LoggerFactory.getLogger(ProgressForm.class);
+
 	// The mode in which the screen operates
 	public enum ProgressMode {
 		PROGRESSBAR, SIMPLE;
@@ -48,8 +52,6 @@ public abstract class ProgressForm<T> extends BaseCustomComponent implements Pro
 	public static final int POLL_INTERVAL = 500;
 
 	private static final long serialVersionUID = -4717815709838453902L;
-
-	private static final Logger LOGGER = Logger.getLogger(ProgressForm.class);
 
 	// counter for keeping track of the number of processed items
 	private volatile AtomicInteger counter = new AtomicInteger();
@@ -340,7 +342,7 @@ public abstract class ProgressForm<T> extends BaseCustomComponent implements Pro
 					});
 					worker.start();
 				} catch (OCSRuntimeException ex) {
-					LOGGER.error(ex.getMessage(), ex);
+					LOG.error(ex.getMessage(), ex);
 					// exception during size estimation
 					showNotification(ex.getMessage(), Notification.Type.ERROR_MESSAGE);
 					getUI().getSession().lock();

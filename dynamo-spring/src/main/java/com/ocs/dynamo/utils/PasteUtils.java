@@ -16,7 +16,7 @@ package com.ocs.dynamo.utils;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Utility class for dealing with common functionality when pasting into fields

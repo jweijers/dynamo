@@ -13,7 +13,7 @@
  */
 package com.ocs.dynamo.importer.impl;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.ocs.dynamo.exception.OCSImportException;
 import com.ocs.dynamo.importer.ImportField;

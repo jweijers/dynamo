@@ -19,7 +19,8 @@ import java.util.Date;
 import javax.persistence.OptimisticLockException;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ocs.dynamo.constants.DynamoConstants;
 import com.ocs.dynamo.domain.AbstractEntity;
@@ -60,7 +61,8 @@ import com.vaadin.ui.UI;
  */
 public abstract class BaseCustomComponent extends CustomComponent implements Buildable {
 
-	private static final Logger LOG = Logger.getLogger(BaseCustomComponent.class);
+	/** Logger for {@link BaseCustomComponent}. */
+	private static final Logger LOG = LoggerFactory.getLogger(BaseCustomComponent.class);
 
 	private static final long serialVersionUID = -8982555842423738005L;
 
