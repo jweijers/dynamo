@@ -66,7 +66,7 @@ public abstract class BaseServiceCustomComponent<ID extends Serializable, T exte
 							try {
 								doDelete();
 							} catch (OCSValidationException ex) {
-								Notification.show(ex.getErrors().get(0), Notification.Type.ERROR_MESSAGE);
+								showNotifification(ex.getErrors().get(0), Notification.Type.ERROR_MESSAGE);
 							}
 						}
 
@@ -134,16 +134,29 @@ public abstract class BaseServiceCustomComponent<ID extends Serializable, T exte
 	 * @param reference
 	 *            the unique ID of the entity model
 	 */
-	public void addFieldEntityModel(String path, String reference) {
+	public final void addFieldEntityModel(String path, String reference) {
 		fieldEntityModels.put(path, reference);
+	}
+	
+	/**
+	 * Method that is called after the user selects an entity to view in Details mode
+	 * 
+	 * @param editForm
+	 *            the edit form which displays the entity
+	 * @param entity
+	 *            the selected entity
+	 */
+	protected void afterEntitySelected(ModelBasedEditForm<ID, T> editForm, T entity) {
+		// override in subclass
 	}
 
 	/**
 	 * Method that is called after the mode is changed (from editable to read only or vice versa)
 	 * 
 	 * @param viewMode
-	 *            the new view mode
+	 *            whether the component is now in view mode (after the change)
 	 * @param editForm
+	 *            the edit form
 	 */
 	protected void afterModeChanged(boolean viewMode, ModelBasedEditForm<ID, T> editForm) {
 		// override in subclasses
@@ -219,14 +232,14 @@ public abstract class BaseServiceCustomComponent<ID extends Serializable, T exte
 	 * @param button
 	 *            the button to register
 	 */
-	public void registerButton(Button button) {
+	public final void registerButton(Button button) {
 		if (button != null) {
 			button.setEnabled(false);
 			toUpdate.add(button);
 		}
 	}
 
-	public void removeFieldEntityModel(String path) {
+	public final void removeFieldEntityModel(String path) {
 		fieldEntityModels.remove(path);
 	}
 

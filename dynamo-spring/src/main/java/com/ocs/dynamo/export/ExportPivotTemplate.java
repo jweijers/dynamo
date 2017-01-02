@@ -35,6 +35,7 @@ import com.ocs.dynamo.dao.SortOrder;
 import com.ocs.dynamo.dao.query.DataSetIterator;
 import com.ocs.dynamo.dao.query.FetchJoinInformation;
 import com.ocs.dynamo.domain.AbstractEntity;
+import com.ocs.dynamo.domain.model.AttributeModel;
 import com.ocs.dynamo.filter.Filter;
 import com.ocs.dynamo.service.BaseService;
 import com.ocs.dynamo.ui.utils.VaadinUtils;
@@ -56,6 +57,14 @@ import com.ocs.dynamo.ui.utils.VaadinUtils;
 public abstract class ExportPivotTemplate<ID extends Serializable, T extends AbstractEntity<ID>, ID2 extends Serializable, U extends AbstractEntity<ID2>>
         extends BaseExportTemplate<ID, T> {
 
+	/**
+	 * The attribute model to be used for the pivoted column
+	 */
+	private AttributeModel attributeModel;
+
+	/**
+	 * The list of captions of the non-pivoted columns
+	 */
 	private final List<String> captions;
 
 	/**
@@ -77,9 +86,10 @@ public abstract class ExportPivotTemplate<ID extends Serializable, T extends Abs
 	 *            the joins used when fetching search results
 	 */
 	public ExportPivotTemplate(BaseService<ID, T> service, SortOrder[] sortOrders, Filter filter,
-	        List<String> captions, String title, boolean intThousandsGrouping,
+	        AttributeModel attributeModel, List<String> captions, String title, boolean intThousandsGrouping,
 	        CustomXlsStyleGenerator<ID, T> customGenerator, FetchJoinInformation... joins) {
 		super(service, sortOrders, filter, title, intThousandsGrouping, customGenerator, joins);
+		this.attributeModel = attributeModel;
 		this.captions = captions;
 	}
 
@@ -132,6 +142,7 @@ public abstract class ExportPivotTemplate<ID extends Serializable, T extends Abs
 			Object prevRowId = null;
 			int rowSum = 0;
 			int valueCount = 0;
+			int index = 0;
 			BigDecimal rowAverage = BigDecimal.ZERO;
 
 			List<String> row = new ArrayList<>();
@@ -149,27 +160,33 @@ public abstract class ExportPivotTemplate<ID extends Serializable, T extends Abs
 					rowSum = 0;
 					rowAverage = BigDecimal.ZERO;
 					valueCount = 0;
+					index = 0;
 				}
 
-				Object value = getValue(entity);
-				if (value != null) {
-					if (value instanceof BigDecimal) {
-						String s = VaadinUtils.bigDecimalToString(usePercentages(), true, (BigDecimal) value);
-						row.add(s);
-						rowSum += ((BigDecimal) value).intValue();
-						rowAverage = rowAverage.add((BigDecimal) value);
-					} else {
-						row.add(VaadinUtils.integerToString(true, (Integer) value));
-						rowSum += (Integer) value;
-						rowAverage = rowAverage.add(BigDecimal.valueOf((Integer) value));
-					}
-					valueCount++;
-				} else {
+				U column = getColumns().get(index);
+				if (!columnValueMatches(entity, column)) {
 					row.add("");
+				} else {
+					Object value = getValue(entity);
+					if (value != null) {
+						if (value instanceof BigDecimal) {
+							String s = VaadinUtils.bigDecimalToString(usePercentages(), true, (BigDecimal) value);
+							row.add(s);
+							rowSum += ((BigDecimal) value).intValue();
+							rowAverage = rowAverage.add((BigDecimal) value);
+						} else {
+							row.add(VaadinUtils.integerToString(true, (Integer) value));
+							rowSum += (Integer) value;
+							rowAverage = rowAverage.add(BigDecimal.valueOf((Integer) value));
+						}
+						valueCount++;
+					} else {
+						row.add("");
+					}
+					entity = iterator.next();
 				}
-
+				index++;
 				prevRowId = rowId;
-				entity = iterator.next();
 			}
 
 			writeCsvRow(writer, row, rowSum, rowAverage, valueCount);
@@ -263,31 +280,34 @@ public abstract class ExportPivotTemplate<ID extends Serializable, T extends Abs
 				valueCount = 0;
 			}
 
-			Object value = getValue(entity);
-
 			int colIndex = getCaptions().size() + index;
-
-			if (value != null) {
-				Cell cell = createCell(row, colIndex, entity, value, null);
-				writeCellValue(cell, value, entity, null, null);
-
-				if (value instanceof BigDecimal) {
-					rowSum += ((BigDecimal) value).intValue();
-					rowAverage = rowAverage.add((BigDecimal) value);
-				} else if (value instanceof Number) {
-					rowSum += ((Number) value).intValue();
-					rowAverage = rowAverage.add(BigDecimal.valueOf(((Number) value).doubleValue()));
-				}
-
-				valueCount++;
+			U column = getColumns().get(index);
+			if (!columnValueMatches(entity, column)) {
+				// write empty cell
+				createCell(row, colIndex, null, null, null);
 			} else {
-				// create empty cell
-				createCell(row, colIndex, entity, null, null);
+				Object value = getValue(entity);
+				if (value != null) {
+					Cell cell = createCell(row, colIndex, entity, value, attributeModel);
+					writeCellValue(cell, value, entity, null, attributeModel);
+
+					if (value instanceof BigDecimal) {
+						rowSum += ((BigDecimal) value).intValue();
+						rowAverage = rowAverage.add((BigDecimal) value);
+					} else if (value instanceof Number) {
+						rowSum += ((Number) value).intValue();
+						rowAverage = rowAverage.add(BigDecimal.valueOf(((Number) value).doubleValue()));
+					}
+					valueCount++;
+				} else {
+					// create empty cell
+					createCell(row, colIndex, entity, null, null);
+				}
+				entity = iterator.next();
 			}
 
 			index++;
 			prevRowId = rowId;
-			entity = iterator.next();
 		}
 
 		// add the last row total
@@ -321,6 +341,13 @@ public abstract class ExportPivotTemplate<ID extends Serializable, T extends Abs
 	 * @return
 	 */
 	protected abstract List<U> getColumns();
+
+	/**
+	 * Checks whether the column value matches
+	 * 
+	 * @return
+	 */
+	protected abstract boolean columnValueMatches(T entity, U column);
 
 	/**
 	 * Obtains the row ID from the entity - this is used to determine whether to start on a new row

@@ -16,7 +16,6 @@ package com.ocs.dynamo.domain.model;
 import javax.inject.Inject;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.ocs.dynamo.domain.TestEntity;
@@ -58,7 +57,8 @@ public class ModelBasedFieldFactoryIntegrationTest extends BaseIntegrationTest {
 		Assert.assertTrue(field instanceof EntityLookupField);
 
 		EntityLookupField<Integer, TestEntity> f = (EntityLookupField<Integer, TestEntity>) field;
-		Assert.assertEquals(new com.vaadin.data.sort.SortOrder("name", SortDirection.ASCENDING), f.getSortOrder());
+		Assert.assertEquals(new com.vaadin.data.sort.SortOrder("name", SortDirection.ASCENDING),
+		        f.getSortOrders().get(0));
 
 	}
 

@@ -34,7 +34,7 @@ import com.ocs.dynamo.domain.model.VisibilityType;
 public @interface Attribute {
 
 	/** the allowed extensions in case a file upload is used to edit the attribute */
-	String allowedExtensions() default "";
+	String[] allowedExtensions() default {};
 
 	/** whether a complex attribute is directly editable */
 	boolean complexEditable() default false;
@@ -50,9 +50,6 @@ public @interface Attribute {
 
 	/** textual description */
 	String description() default "";
-
-	/** should the field get focus in a detail table */
-	boolean detailFocus() default false;
 
 	/** the display format (useful in case of dates) */
 	String displayFormat() default "";
@@ -70,6 +67,13 @@ public @interface Attribute {
 
 	/** the name of the property in which to store the file name (after an upload) */
 	String fileNameProperty() default "";
+
+	/**
+	 * Names of other attributes that appear on the same line as this attribute inside an eedit form
+	 * 
+	 * @return
+	 */
+	String[] groupTogetherWith() default {};
 
 	/** whether the component should be represented as an image */
 	boolean image() default false;
@@ -107,19 +111,30 @@ public @interface Attribute {
 	/** replacement search path */
 	String replacementSearchPath() default "";
 
-	/** */
+	/**
+	 * 
+	 * @return whether the attribute is required
+	 */
 	boolean required() default false;
 
-	/** whether the field is searchable */
+	/**
+	 * @return whether the attribute is required when performing a search
+	 */
+	boolean requiredForSearching() default false;
+
+	/** @return whether the field is searchable */
 	boolean searchable() default false;
 
-	/** case sensitive search */
+	/** @return whether searching is case-sensitive */
 	boolean searchCaseSensitive() default false;
 
-	/** whether to search by single value (for integer or date fields) */
+	/**
+	 * @return whether to search for an exact match rather than an interval (for integer or date
+	 *         fields)
+	 */
 	boolean searchForExactValue() default false;
 
-	/** search prefix only */
+	/** @return whether to match on prefix only */
 	boolean searchPrefixOnly() default false;
 
 	/** determines which selection component to use in search mode */
