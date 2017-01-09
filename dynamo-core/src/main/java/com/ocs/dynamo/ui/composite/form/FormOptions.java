@@ -124,6 +124,9 @@ public class FormOptions implements Serializable {
 	 */
 	private boolean tableExportAllowed = false;
 
+	/**
+	 * Whether the user is allowed to navigate to the detail screen by double clicking on a row
+	 */
 	private boolean doubleClickSelectAllowed = true;
 
 	public AttributeGroupMode getAttributeGroupMode() {

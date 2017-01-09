@@ -258,6 +258,7 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 			// construct the basic model
 			EntityModelImpl<T> model = constructModelInner(entityClass, reference);
 
+			// determine the attribute group mapping
 			Map<String, String> attributeGroupMap = determineAttributeGroupMapping(model, entityClass);
 			model.addAttributeGroup(EntityModel.DEFAULT_GROUP);
 
@@ -296,7 +297,7 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 				}
 			}
 
-			// assign ordering and sort
+			// put the attribute in the correct order based on the @AttributeOrder annotation
 			determineAttributeOrder(entityClass, reference, tempModelList);
 			Collections.sort(tempModelList);
 
