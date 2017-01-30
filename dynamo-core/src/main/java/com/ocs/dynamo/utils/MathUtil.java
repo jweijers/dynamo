@@ -20,20 +20,6 @@ public final class MathUtil {
 
 	public static final BigDecimal HUNDRED = new BigDecimal(100);
 
-	private MathUtil() {
-	}
-
-	/**
-	 * Performs a null-safe get of an Integer
-	 * 
-	 * @param x
-	 *            the integer
-	 * @return
-	 */
-	public static int nullSafeGet(Integer x) {
-		return x == null ? 0 : x;
-	}
-
 	/**
 	 * Divides the first argument by the second argument, then converts the result to a percentage
 	 * 
@@ -51,8 +37,49 @@ public final class MathUtil {
 		return first.multiply(HUNDRED).divide(second, scale, RoundingMode.HALF_UP);
 	}
 
+	/**
+	 * Divides the first argument by the second argument, then converts to a percentage
+	 * 
+	 * @param first
+	 *            the first argument
+	 * @param second
+	 *            the second argument
+	 * @param scale
+	 *            the desired scale
+	 * @return
+	 */
 	public static BigDecimal dividePercentage(Integer first, Integer second, int scale) {
-		return dividePercentage(first == null ? null : new BigDecimal(first), second == null ? null : new BigDecimal(
-		        second), scale);
+		return dividePercentage(first == null ? BigDecimal.ZERO : new BigDecimal(first), second == null ? null
+		        : new BigDecimal(second), scale);
+	}
+	
+	/**
+	 * Returns the result of multiplying a value with a certain percentage,
+	 * rounded to the specified precision
+	 * 
+	 * @param percentage
+	 *            the percentage value
+	 * @param value
+	 *            the non-percentage value
+	 * @param scale
+	 *            the scale
+	 * @return
+	 */
+	public static BigDecimal multiplyPercentage(BigDecimal percentage, BigDecimal value, int scale) {
+		return percentage.multiply(value).divide(HUNDRED, scale, RoundingMode.HALF_UP);
+	}
+
+	/**
+	 * Performs a null-safe get of an Integer
+	 * 
+	 * @param x
+	 *            the integer
+	 * @return
+	 */
+	public static int nullSafeGet(Integer x) {
+		return x == null ? 0 : x;
+	}
+
+	private MathUtil() {
 	}
 }

@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -42,7 +43,6 @@ import com.ocs.dynamo.ui.component.EntityListSelect;
 import com.ocs.dynamo.ui.component.EntityLookupField;
 import com.ocs.dynamo.ui.component.FancyListSelect;
 import com.ocs.dynamo.ui.component.QuickAddEntityComboBox;
-import com.ocs.dynamo.ui.component.QuickAddListSelect;
 import com.ocs.dynamo.ui.component.SimpleTokenFieldSelect;
 import com.ocs.dynamo.ui.component.TimeField;
 import com.ocs.dynamo.ui.component.TokenFieldSelect;
@@ -77,6 +77,7 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.TableFieldFactory;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 
 /**
  * Extension of the standard Vaadin field factory for creating custom fields
@@ -531,13 +532,13 @@ public class ModelBasedFieldFactory<T> extends DefaultFieldGroupFieldFactory imp
 				FormOptions fo = new FormOptions();
 				fo.setShowRemoveButton(true);
 				if (String.class.equals(attributeModel.getMemberType())) {
-					field = new CollectionTable<>(attributeModel, false, fo);
+					field = new CollectionTable<>(attributeModel, true, fo);
 				} else if (Integer.class.equals(attributeModel.getMemberType())) {
-					field = new CollectionTable<>(attributeModel, false, fo);
+					field = new CollectionTable<>(attributeModel, true, fo);
 				} else if (Long.class.equals(attributeModel.getMemberType())) {
-					field = new CollectionTable<>(attributeModel, false, fo);
+					field = new CollectionTable<>(attributeModel, true, fo);
 				} else if (BigDecimal.class.equals(attributeModel.getMemberType())) {
-					field = new CollectionTable<>(attributeModel, false, fo);
+					field = new CollectionTable<>(attributeModel, true, fo);
 				} else {
 					// other types not supported for now
 					throw new OCSRuntimeException("Element collections of this type are currently not supported");
@@ -570,6 +571,15 @@ public class ModelBasedFieldFactory<T> extends DefaultFieldGroupFieldFactory imp
 			// just a regular field
 			field = createField(attributeModel.getType(), Field.class);
 		}
+
+		if (field instanceof DateField) {
+			DateField df = (DateField) field;
+			df.setLocale(new Locale(SystemPropertyUtils.getDateLocale()));
+			if (UI.getCurrent() != null) {
+				df.setTimeZone(VaadinUtils.getTimeZone(UI.getCurrent()));
+			}
+		}
+
 		field.setCaption(attributeModel.getDisplayName());
 
 		postProcessField(field, attributeModel);

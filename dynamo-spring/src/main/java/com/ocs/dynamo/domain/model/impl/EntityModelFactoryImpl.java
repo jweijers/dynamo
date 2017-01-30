@@ -896,6 +896,10 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 				model.setMaxLength(attribute.maxLength());
 			}
 
+			if (attribute.maxLengthInTable() > -1) {
+				model.setMaxLengthInTable(attribute.maxLengthInTable());
+			}
+
 			if (attribute.maxValue() < Long.MAX_VALUE) {
 				model.setMaxValue(attribute.maxValue());
 			}
@@ -1135,6 +1139,11 @@ public class EntityModelFactoryImpl implements EntityModelFactory {
 		msg = getAttributeMessage(entityModel, model, EntityModel.MAX_LENGTH);
 		if (!StringUtils.isEmpty(msg)) {
 			model.setMaxLength(Integer.parseInt(msg));
+		}
+
+		msg = getAttributeMessage(entityModel, model, EntityModel.MAX_LENGTH_IN_TABLE);
+		if (!StringUtils.isEmpty(msg)) {
+			model.setMaxLengthInTable(Integer.parseInt(msg));
 		}
 
 		msg = getAttributeMessage(entityModel, model, EntityModel.MAX_VALUE);

@@ -350,7 +350,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- JasperReports Library -->
 			<dependency>
 				<groupId>nl.opencirclesolutions</groupId>
@@ -811,13 +811,13 @@
 			</releases>
 		</repository>
 		<repository>
-            <id>jasperreports-releases</id>
-            <url>https://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-releases/</url>
-        </repository>
+			<id>jasperreports-releases</id>
+			<url>https://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-releases/</url>
+		</repository>
 		<repository>
-            <id>jasperreports-third-party</id>
-            <url>http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/</url>
-        </repository>
-   	</repositories>
+			<id>jasperreports-third-party</id>
+			<url>http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+	</repositories>
 
 </project>

@@ -409,9 +409,8 @@ public class ModelBasedEditForm<ID extends Serializable, T extends AbstractEntit
 		        && (AttributeType.BASIC.equals(type) || AttributeType.LOB.equals(type) || attributeModel
 		                .isComplexEditable())) {
 			if (attributeModel.isReadOnly() || isViewMode()) {
-				if (attributeModel.isUrl()
-				        || (AttributeType.ELEMENT_COLLECTION.equals(type) && attributeModel.isComplexEditable())) {
-					// display a complex component in read-only mode
+				if (attributeModel.isUrl()) {
+					// display a complex component even in read-only mode
 					constructField(parent, entityModel, attributeModel, true, tabIndex);
 				} else if (AttributeType.DETAIL.equals(type) && attributeModel.isComplexEditable()) {
 					Field<?> f = constructCustomField(entityModel, attributeModel, viewMode);
@@ -1143,6 +1142,11 @@ public class ModelBasedEditForm<ID extends Serializable, T extends AbstractEntit
 				// label is displayed in view mode or when its an existing entity
 				newLabel.setVisible(entity.getId() != null || isViewMode());
 
+				// copy custom style name (if any)
+				if (e.getValue().getStyleName() != null) {
+					newLabel.setStyleName(e.getValue().getStyleName());
+				}
+
 				// replace all existing labels with new labels
 				HasComponents hc = e.getValue().getParent();
 				if (hc instanceof Layout) {
@@ -1207,6 +1211,30 @@ public class ModelBasedEditForm<ID extends Serializable, T extends AbstractEntit
 			if (hc instanceof Layout) {
 				((Layout) hc).replaceComponent(oldLabel, replacement);
 				labels.get(isViewMode()).put(am, replacement);
+			}
+		}
+	}
+
+	/**
+	 * Apply styling to a label
+	 * 
+	 * @param propertyName
+	 *            the name of the property
+	 * @param className
+	 *            the name of the CSS class to add
+	 */
+	public void styleLabel(String propertyName, String className) {
+		AttributeModel am = getEntityModel().getAttributeModel(propertyName);
+		if (am != null) {
+			Component editLabel = labels.get(false) == null ? null : labels.get(false).get(am);
+			Component viewLabel = labels.get(true) == null ? null : labels.get(true).get(am);
+
+			if (editLabel != null) {
+				editLabel.addStyleName(className);
+			}
+
+			if (viewLabel != null) {
+				viewLabel.addStyleName(className);
 			}
 		}
 	}

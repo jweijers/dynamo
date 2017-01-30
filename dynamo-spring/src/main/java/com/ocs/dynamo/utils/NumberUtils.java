@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 
 public final class NumberUtils {
 
+	private NumberUtils() {
+	}
+	
 	/**
 	 * Formats a value
 	 * 
@@ -44,6 +47,10 @@ public final class NumberUtils {
 	 * Checks if a class is an integer (either wrapper or primitive)
 	 * 
 	 * @param clazz
+<<<<<<< HEAD
+=======
+	 *            the class to check
+>>>>>>> cm1branch-v13
 	 * @return
 	 */
 	public static boolean isInteger(Class<?> clazz) {
@@ -52,8 +59,8 @@ public final class NumberUtils {
 
 	/**
 	 * Checks if a class is an long (either wrapper or primitive)
-	 * 
 	 * @param clazz
+	 *            the class to check
 	 * @return
 	 */
 	public static boolean isLong(Class<?> clazz) {
@@ -73,6 +80,4 @@ public final class NumberUtils {
 		        || byte.class.isAssignableFrom(clazz) || short.class.isAssignableFrom(clazz);
 	}
 
-	private NumberUtils() {
-	}
 }
